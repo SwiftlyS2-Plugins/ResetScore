@@ -1,8 +1,5 @@
 using System.Data;
 using System.Reflection;
-using System.Security.Permissions;
-using Dapper;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SwiftlyS2.Shared;
 using SwiftlyS2.Shared.Commands;
@@ -62,9 +59,6 @@ public class CommandsManager
                         MessageType.Chat,
                         _config.Prefix + _core.Localizer["resetscore"]
                     );
-
-                    player.SendMessage(MessageType.Chat, _config.Prefix);
-                    Console.WriteLine(_config.Prefix);
                 }
             );
         }
