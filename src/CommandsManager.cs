@@ -1,5 +1,6 @@
 using System.Data;
 using System.Reflection;
+using System;
 using Microsoft.Extensions.Options;
 using SwiftlyS2.Shared;
 using SwiftlyS2.Shared.Commands;
@@ -23,10 +24,14 @@ public class CommandsManager
 
     public void RegisterCommands()
     {
-        foreach (var command in _config.Commands)
+        foreach (var command in _config.Commands ?? Array.Empty<string>())
         {
+            var commandName = command?.Trim();
+            if (string.IsNullOrWhiteSpace(commandName))
+                continue;
+
             _core.Command.RegisterCommand(
-                command,
+                commandName,
                 (ICommandContext ctx) =>
                 {
                     IPlayer? player = ctx.Sender;
