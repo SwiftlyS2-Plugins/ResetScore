@@ -38,12 +38,17 @@ public class CommandsManager
                     if (player == null)
                         return;
 
-                    var matchstats = player.Controller.ActionTrackingServices.MatchStats;
+                    var trackingServices = player.Controller.ActionTrackingServices;
+                    if (trackingServices == null) return;
+
+                    var matchstats = trackingServices.MatchStats;
+                    if (matchstats == null) return;
 
                     if (
                         matchstats.Kills == 0
                         && matchstats.Deaths == 0
-                        && matchstats.Assists == 0 & matchstats.Damage == 0
+                        && matchstats.Assists == 0
+                        && matchstats.Damage == 0
                     )
                     {
                         player.SendMessage(
@@ -57,8 +62,16 @@ public class CommandsManager
                     matchstats.Deaths = 0;
                     matchstats.Assists = 0;
                     matchstats.Damage = 0;
+                    player.Controller.Score = 0;
+
+                    if (_config.ResetMVP)
+                    {
+                        player.Controller.MVPs = 0;
+                        player.Controller.MVPsUpdated();
+                    }
 
                     player.Controller.ActionTrackingServicesUpdated();
+                    player.Controller.ScoreUpdated();
 
                     player.SendMessage(
                         MessageType.Chat,
